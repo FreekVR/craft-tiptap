@@ -1,0 +1,41 @@
+{
+    "name": "digitalnatives/craft-tiptap",
+    "description": "A richtext editor designed for headless Craft applications. Uses the open source tiptap-editor for Vue.",
+    "type": "craft-plugin",
+    "version": "0.1.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "craft-tiptap"
+    ],
+    "support": {
+        "docs": "https://github.com/FreekVR/craft-tiptap/craft-tiptap/blob/master/README.md",
+        "issues": "https://github.com/FreekVR/craft-tiptap/craft-tiptap/issues"
+    },
+    "license": "MIT",
+    "homepage": "https://github.com/FreekVR/craft-tiptap",
+    "authors": [
+        {
+            "name": "Freek van Rijt",
+            "homepage": "https://github.com/FreekVR"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "digitalnatives\\tiptap\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "craft-tiptap",
+        "handle": "craft-tiptap",
+        "hasCpSettings": true,
+        "hasCpSection": false,
+        "changelogUrl": "https://raw.githubusercontent.com/FreekVR/craft-tiptap/craft-tiptap/master/CHANGELOG.md",
+        "class": "digitalnatives\\tiptap\\TipTap"
+    }
+}

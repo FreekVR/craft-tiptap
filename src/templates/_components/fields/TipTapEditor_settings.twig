@@ -1,0 +1,26 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * craft-tiptap plugin for Craft CMS
+ *
+ * TipTapEditor Field Settings
+ *
+ * @author    Freek van Rijt
+ * @copyright Copyright (c) 2019 Freek van Rijt
+ * @link      https://github.com/FreekVR
+ * @package   Crafttiptap
+ * @since     0.1.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("digitalnativestiptap\\crafttiptap\\assetbundles\\crafttiptap\\CrafttiptapAsset") %}
+
+{{ forms.textField({
+    label: 'Some Attribute',
+    instructions: 'Enter some attribute here.',
+    id: 'someAttribute',
+    name: 'someAttribute',
+    value: field['someAttribute']})
+}}
