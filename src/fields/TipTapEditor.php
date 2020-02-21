@@ -9,10 +9,9 @@
  * @copyright Copyright (c) 2019 Freek van Rijt
  */
 
-namespace digitalnativestiptap\crafttiptap\fields;
+namespace digitalnatives\tiptap\fields;
 
-use digitalnativestiptap\crafttiptap\Crafttiptap;
-use digitalnativestiptap\crafttiptap\assetbundles\tiptapeditorfield\TipTapEditorFieldAsset;
+use digitalnatives\tiptap\assets\TipTapAsset;
 
 use Craft;
 use craft\base\ElementInterface;
@@ -20,7 +19,6 @@ use craft\base\Field;
 use craft\helpers\Db;
 use yii\db\Schema;
 use craft\helpers\Json;
-use digitalnatives\tiptap\assetbundles\editor\EditorAsset;
 
 /**
  * TipTapEditor Field
@@ -45,7 +43,7 @@ class TipTapEditor extends Field
      *
      * @var string
      */
-    public $someAttribute = 'Some Default';
+    //public $someAttribute = 'Some Default';
 
     // Static Methods
     // =========================================================================
@@ -76,10 +74,10 @@ class TipTapEditor extends Field
     public function rules()
     {
         $rules = parent::rules();
-        $rules = array_merge($rules, [
-            ['someAttribute', 'string'],
-            ['someAttribute', 'default', 'value' => 'Some Default'],
-        ]);
+//        $rules = array_merge($rules, [
+//            ['someAttribute', 'string'],
+//            ['someAttribute', 'default', 'value' => 'Some Default'],
+//        ]);
         return $rules;
     }
 
@@ -96,7 +94,7 @@ class TipTapEditor extends Field
      */
     public function getContentColumnType(): string
     {
-        return Schema::TYPE_STRING;
+        return Schema::TYPE_JSON;
     }
 
     /**
@@ -114,7 +112,7 @@ class TipTapEditor extends Field
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
-        return $value;
+        return json_decode($value);
     }
 
     /**
@@ -329,41 +327,45 @@ class TipTapEditor extends Field
      * The same principles also apply if you’re including your JavaScript code with
      * [[\craft\web\View::registerJs()]].
      *
-     * @param mixed                 $value           The field’s value. This will either be the [[normalizeValue() normalized value]],
+     * @param mixed $value The field’s value. This will either be the [[normalizeValue() normalized value]],
      *                                               raw POST data (i.e. if there was a validation error), or null
-     * @param ElementInterface|null $element         The element the field is associated with, if there is one
+     * @param ElementInterface|null $element The element the field is associated with, if there is one
      *
      * @return string The input HTML.
+     * @throws \yii\base\InvalidConfigException
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        // Register our asset bundle
-        Craft::$app->getView()->registerAssetBundle(EditorAsset::class);
+        $view = Craft::$app->getView();
+        $id = $view->formatInputId($this->handle);
+        $nsId = $view->namespaceInputId($id);
+        //$encValue = htmlentities((string)$value, ENT_NOQUOTES, 'UTF-8');
 
-        // Get our id and namespace
-        $id = Craft::$app->getView()->formatInputId($this->handle);
-        $namespacedId = Craft::$app->getView()->namespaceInputId($id);
+        $css = <<<CSS
+CSS;
 
-        // Variables to pass down to our field JavaScript to let it namespace properly
-        $jsonVars = [
-            'id' => $id,
-            'name' => $this->handle,
-            'namespace' => $namespacedId,
-            'prefix' => Craft::$app->getView()->namespaceInputId(''),
-        ];
-        $jsonVars = Json::encode($jsonVars);
-        Craft::$app->getView()->registerJs("$('#{$namespacedId}-field').CrafttiptapTipTapEditor(" . $jsonVars . ");");
+        $view->registerAssetBundle(TipTapAsset::class);
+        $view->registerCss($css);
 
-        // Render the input template
-        return Craft::$app->getView()->renderTemplate(
-            'craft-tiptap/_components/fields/TipTapEditor_input',
-            [
-                'name' => $this->handle,
-                'value' => $value,
-                'field' => $this,
-                'id' => $id,
-                'namespacedId' => $namespacedId,
-            ]
-        );
+        return "
+        <tiptap :content='{$value}' v-model='{$this->handle}_Model'></tiptap>
+        <textarea id='{$id}' name='{$this->handle}'>{{ {$this->handle}_Model }}</textarea>
+        ";
+    }
+
+    /**
+     * Validates the component.
+     *
+     * @param string[]|null $attributeNames List of attribute names that should
+     * be validated. If this parameter is empty, it means any attribute listed
+     * in the applicable validation rules should be validated.
+     * @param bool $clearErrors Whether existing errors should be cleared before
+     * performing validation
+     * @return bool Whether the validation is successful without any error.
+     */
+    public function validate($attributeNames = null, $clearErrors = true)
+    {
+        return true;
+        // TODO: Implement validate() method.
     }
 }

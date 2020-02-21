@@ -33,7 +33,7 @@
     "extra": {
         "name": "craft-tiptap",
         "handle": "craft-tiptap",
-        "hasCpSettings": true,
+        "hasCpSettings": false,
         "hasCpSection": false,
         "changelogUrl": "https://raw.githubusercontent.com/FreekVR/craft-tiptap/craft-tiptap/master/CHANGELOG.md",
         "class": "digitalnatives\\tiptap\\TipTap"

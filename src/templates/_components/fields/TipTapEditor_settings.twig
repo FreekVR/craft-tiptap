@@ -14,13 +14,3 @@
 #}
 
 {% import "_includes/forms" as forms %}
-
-{% do view.registerAssetBundle("digitalnativestiptap\\crafttiptap\\assetbundles\\crafttiptap\\CrafttiptapAsset") %}
-
-{{ forms.textField({
-    label: 'Some Attribute',
-    instructions: 'Enter some attribute here.',
-    id: 'someAttribute',
-    name: 'someAttribute',
-    value: field['someAttribute']})
-}}
