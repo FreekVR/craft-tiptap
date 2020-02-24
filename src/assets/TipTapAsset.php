@@ -15,12 +15,12 @@ class TipTapAsset extends AssetBundle
      */
     public function init()
     {
-        $this->sourcePath = dirname(__DIR__, 2).'/lib/tiptap/dist';
+        $this->sourcePath = dirname(__DIR__, 2).'/js/wrapper.js';
         $this->depends = [
             VueAsset::class
         ];
         $this->js = [
-            'tiptap.min.js',
+            'js/wrapper.js',
         ];
 
         parent::init();
